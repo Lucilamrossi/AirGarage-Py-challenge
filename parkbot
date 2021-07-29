@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+import json
+import handlers
+import sys
+
+commands = {
+    "locate": handlers.locate_handler,
+    "find_price_hourly_lte": handlers.less_or_equal_handler,
+    "find_price_hourly_gt": handlers.more_or_equal_handler
+}
+
+def fileReader(fileName, command, argument):
+    try:
+        file = open(fileName)
+        data = json.load(file)
+        file.close()
+    except:
+        raise Exception(f"Error: not possible to read '{fileName}'")
+    
+    try:
+        command_function = commands[command]
+    except:
+        raise Exception(f"Error: command '{command}' is not valid")
+    
+    try:
+        response = ''
+        response = command_function(data, argument)
+        response = response if len(response) > 0 else "No parking lots were found"
+
+        sys.stdout.write(response)
+    except: 
+        raise Exception(f"Error: internal error")
+    
+
+for line in sys.stdin:
+    file_command_and_argument = line.split()
+    break
+
+try:
+    fileName = file_command_and_argument[0]
+    command = file_command_and_argument[1]
+    argument = file_command_and_argument[2]
+except: 
+    sys.stderr.write("Filename, command and argument must be given") 
+    exit
+
+try:
+    fileReader(fileName, command, argument)
+except Exception as exc:
+    sys.stderr.write(exc.args[0])
