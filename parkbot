@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 import json
-import handlers
 import sys
+import handlers
 
 commands = {
     "locate": handlers.locate_handler,
     "find_price_hourly_lte": handlers.less_or_equal_handler,
-    "find_price_hourly_gt": handlers.more_or_equal_handler
+    "find_price_hourly_gt": handlers.greater_or_equal_handler
 }
 
 def fileReader(fileName, command, argument):
@@ -23,9 +23,8 @@ def fileReader(fileName, command, argument):
         raise Exception(f"Error: command '{command}' is not valid")
     
     try:
-        response = ''
-        response = command_function(data, argument)
-        response = response if len(response) > 0 else "No parking lots were found"
+        list = command_function(data, argument)
+        response = list or "No parking lots were found"
 
         sys.stdout.write(response)
     except: 

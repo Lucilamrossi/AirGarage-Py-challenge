@@ -23,7 +23,7 @@ def less_or_equal_handler(file, limit):
 
   return selected_elements
 
-def more_or_equal_handler(file, limit):
+def greater_or_equal_handler(file, limit):
   selected_elements = ''
   for element in file:
     if element['price_hourly'] >= int(limit):
